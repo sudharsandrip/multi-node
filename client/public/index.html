@@ -1,0 +1,47 @@
+<!Doctype html>
+
+<html>
+
+<head>
+    <title>Hello World</title>
+    <script src="https://cdn.socket.io/4.2.0/socket.io.min.js"
+        integrity="sha384-PiBR5S00EtOj2Lto9Uu81cmoyZqR57XcOna1oAuVuIEjzj0wpqDVfD0JA9eXlRsj"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+
+    </script>
+</head>
+
+<body>
+    <h1>Basic Socket connection</h1>
+    <div class="container">
+        <input type="text" id="textbox" />
+        <button class="broadcast-btn">Broadcast</button>
+    </div>
+    <div id="messages">
+        <h2>Live Messages:</h2>
+    </div>
+
+    <script type="text/javascript">
+        const socket = io('http://localhost:3000', {
+            path: '/ws'
+        });
+
+        socket.on('connect', () => {
+            console.log(`Socket connected id: ${socket.id}`);
+        });
+
+        socket.on('global_message', (data) => {
+            console.log(data);
+        });
+        $('.broadcast-btn').click(function () {
+            const val = $('#textbox').val();
+            console.log(val);
+            socket.emit('local_message', val);
+        });
+    </script>
+</body>
+
+</html>
