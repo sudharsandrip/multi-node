@@ -7,7 +7,10 @@ const app = express();
 
 app.get('/', (req, res) => {
     // res.end(`Hi, PID: ${process.pid}`);
-    return res.json(`PORT: ${process.env.PORT}`);
+    return res.json({
+        PORT: process.env.PORT,
+        ip: req.ip.toString()
+    });
 });
 
 const server = app.listen(process.env.PORT);

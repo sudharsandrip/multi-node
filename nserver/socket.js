@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
-const { redis } = require('./redisFns');
+const { redis, ioEmitter } = require('./redisFns');
 
 async function updateRoomCount({ room, socketId, connected }) {
     try {
@@ -36,8 +36,9 @@ module.exports = (io) => {
         });
 
         socket.on('join_room', (data) => {
-            socket.join(data.room);
-            socket._room = data.room;
+            console.log('join_room', data);
+            socket.join(data);
+            socket._room = data;
 
             updateRoomCount({
                 room: socket._room,
@@ -53,7 +54,11 @@ module.exports = (io) => {
         });
 
         socket.on('local_message', data => {
-            console.log('local_message', data);
+            console.log(data);
+            ioEmitter.to('room1').emit('global_message', {
+                ...data,
+                ts: Date.now(),
+              });
         });
     });
 };
