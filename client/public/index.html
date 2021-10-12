@@ -26,11 +26,13 @@
 
     <script type="text/javascript">
         const socket = io('http://localhost:3000', {
-            path: '/ws'
+            path: '/ws',
+            transports: ["websocket", "polling"]
         });
 
         socket.on('connect', () => {
             console.log(`Socket connected id: ${socket.id}`);
+            socket.emit('join_room', 'room4')
         });
 
         socket.on('global_message', (data) => {
@@ -38,7 +40,7 @@
         });
         $('.broadcast-btn').click(function () {
             const val = $('#textbox').val();
-            console.log(val);
+            // console.log(val);
             socket.emit('local_message', val);
         });
     </script>
